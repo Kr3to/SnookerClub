@@ -1,0 +1,29 @@
+﻿@model IEnumerable<lab3_lab4.Controllers.SnookerController.Player>
+
+@{
+    ViewData["Title"] = "All Players";
+}
+
+<h2>All Players</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Ranking</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.Id</td>
+                <td>@player.Name</td>
+                <td>@player.Ranking</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Snooker">Back to Snooker Management</a>

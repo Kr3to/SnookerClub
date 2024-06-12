@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Snooker Management";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Snooker Management</h1>
+</div>
+
+<div>
+    <h2>Create Player</h2>
+    <form asp-action="CreatePlayer" method="post">
+        <div>
+            <label>Name:</label>
+            <input type="text" name="name" required />
+        </div>
+        <div>
+            <label>Ranking:</label>
+            <input type="number" name="ranking" required />
+        </div>
+        <button type="submit">Create Player</button>
+    </form>
+</div>
+
+<div>
+    <h2>Create Match</h2>
+    <form asp-action="CreateMatch" method="post">
+        <div>
+            <label>Player 1 ID:</label>
+            <input type="number" name="player1Id" required />
+        </div>
+        <div>
+            <label>Player 2 ID:</label>
+            <input type="number" name="player2Id" required />
+        </div>
+        <div>
+            <label>Location:</label>
+            <input type="text" name="location" required />
+        </div>
+        <div>
+            <label>Tournament:</label>
+            <input type="text" name="tournament" required />
+        </div>
+        <button type="submit">Create Match</button>
+    </form>
+</div>

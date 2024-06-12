@@ -1,0 +1,33 @@
+﻿@model IEnumerable<lab3_lab4.Controllers.SnookerController.Match>
+
+@{
+    ViewData["Title"] = "All Matches";
+}
+
+<h2>All Matches</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Match ID</th>
+            <th>Player 1</th>
+            <th>Player 2</th>
+            <th>Location</th>
+            <th>Tournament</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var match in Model)
+        {
+            <tr>
+                <td>@match.MatchId</td>
+                <td>@match.Player1Name (ID: @match.Player1Id)</td>
+                <td>@match.Player2Name (ID: @match.Player2Id)</td>
+                <td>@match.Location</td>
+                <td>@match.Tournament</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="/Snooker">Back to Snooker Management</a>

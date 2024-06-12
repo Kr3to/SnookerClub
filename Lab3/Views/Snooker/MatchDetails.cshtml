@@ -1,0 +1,15 @@
+﻿@model lab3_lab4.Controllers.SnookerController.Match
+
+@{
+    ViewData["Title"] = "Match Details";
+}
+
+<h2>Match Details</h2>
+
+<p>Match ID: @Model.MatchId</p>
+<p>Player 1 ID: @Model.Player1Id</p>
+<p>Player 2 ID: @Model.Player2Id</p>
+<p>Location: @Model.Location</p>
+<p>Tournament: @Model.Tournament</p>
+
+<a href="/Snooker">Back to Snooker Management</a>
