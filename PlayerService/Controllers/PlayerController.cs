@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Data.Entities;
+using Data;
 
 namespace PlayerService.Controllers
 {
@@ -9,36 +11,36 @@ namespace PlayerService.Controllers
     [Route("[controller]")]
     public class PlayerController : ControllerBase
     {
-        private static List<Player> players = new List<Player>();
-        private static int nextId = 1;
+        private readonly AppDbContext _context;
         private readonly ILogger<PlayerController> _logger;
 
-        public PlayerController(ILogger<PlayerController> logger)
+        public PlayerController(AppDbContext context, ILogger<PlayerController> logger)
         {
+            _context = context;
             _logger = logger;
         }
 
         [HttpPost("create")]
-        public IActionResult CreatePlayer([FromBody] Player player)
+        public async Task<IActionResult> CreatePlayer([FromBody] PlayerEntity player)
         {
             _logger.LogInformation("Creating player with Name: {Name}, Ranking: {Ranking}", player.Name, player.Ranking);
-            player.Id = nextId++;
-            players.Add(player);
+            _context.Players.Add(player);
+            await _context.SaveChangesAsync();
             _logger.LogInformation("Player created successfully with Id: {Id}", player.Id);
             return Ok(player);
         }
 
         [HttpGet("all")]
-        public IActionResult GetAllPlayers()
+        public async Task<IActionResult> GetAllPlayers()
         {
-            return Ok(players);
+            return Ok(await _context.Players.ToListAsync());
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetPlayerById(int id)
+        public async Task<IActionResult> GetPlayerById(int id)
         {
             _logger.LogInformation("Fetching player with ID: {Id}", id);
-            var player = players.FirstOrDefault(p => p.Id == id);
+            var player = await _context.Players.FindAsync(id);
             if (player == null)
             {
                 _logger.LogError("Player not found with ID: {Id}", id);
@@ -47,12 +49,5 @@ namespace PlayerService.Controllers
             _logger.LogInformation("Fetched player with ID: {Id}, Name: {Name}", player.Id, player.Name);
             return Ok(player);
         }
-    }
-
-    public class Player
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Ranking { get; set; }
     }
 }

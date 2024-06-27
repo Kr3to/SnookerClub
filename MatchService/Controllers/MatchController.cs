@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
+using Data.Entities;
+using Data;
 
 namespace MatchService.Controllers
 {
@@ -11,13 +13,13 @@ namespace MatchService.Controllers
     [Route("[controller]")]
     public class MatchController : ControllerBase
     {
-        private static List<Match> matches = new List<Match>();
-        private static int nextMatchId = 1;
+        private readonly AppDbContext _context;
         private readonly HttpClient _httpClient;
         private readonly ILogger<MatchController> _logger;
 
-        public MatchController(IHttpClientFactory httpClientFactory, ILogger<MatchController> logger)
+        public MatchController(AppDbContext context, IHttpClientFactory httpClientFactory, ILogger<MatchController> logger)
         {
+            _context = context;
             _httpClient = httpClientFactory.CreateClient();
             _logger = logger;
         }
@@ -36,9 +38,8 @@ namespace MatchService.Controllers
                 return BadRequest(new { Message = "One or both players not found." });
             }
 
-            var match = new Match
+            var match = new MatchEntity
             {
-                MatchId = nextMatchId++,
                 Player1Id = matchDto.Player1Id,
                 Player2Id = matchDto.Player2Id,
                 Location = matchDto.Location,
@@ -47,15 +48,16 @@ namespace MatchService.Controllers
                 Player2Name = player2.Name
             };
 
-            matches.Add(match);
+            _context.Matches.Add(match);
+            await _context.SaveChangesAsync();
             _logger.LogInformation("Match created successfully with MatchId: {MatchId}", match.MatchId);
             return Ok(match);
         }
 
         [HttpGet("all")]
-        public IActionResult GetAllMatches()
+        public async Task<IActionResult> GetAllMatches()
         {
-            return Ok(matches);
+            return Ok(await _context.Matches.ToListAsync());
         }
 
         [HttpGet("test-player-connection/{playerId}")]
@@ -69,7 +71,7 @@ namespace MatchService.Controllers
             return Ok(player);
         }
 
-        private async Task<Player> GetPlayerById(int playerId)
+        private async Task<PlayerEntity> GetPlayerById(int playerId)
         {
             try
             {
@@ -77,7 +79,7 @@ namespace MatchService.Controllers
                 var response = await _httpClient.GetAsync($"http://localhost:5000/player/{playerId}");
                 if (response.IsSuccessStatusCode)
                 {
-                    var player = await response.Content.ReadFromJsonAsync<Player>();
+                    var player = await response.Content.ReadFromJsonAsync<PlayerEntity>();
                     _logger.LogInformation("Fetched player: {PlayerName}", player.Name);
                     return player;
                 }
@@ -88,24 +90,6 @@ namespace MatchService.Controllers
                 _logger.LogError(ex, "Exception occurred while fetching player with ID: {PlayerId}", playerId);
             }
             return null;
-        }
-
-        public class Match
-        {
-            public int MatchId { get; set; }
-            public int Player1Id { get; set; }
-            public int Player2Id { get; set; }
-            public string Location { get; set; }
-            public string Tournament { get; set; }
-            public string Player1Name { get; set; }
-            public string Player2Name { get; set; }
-        }
-
-        public class Player
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public int Ranking { get; set; }
         }
     }
 }

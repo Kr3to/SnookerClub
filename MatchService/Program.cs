@@ -1,17 +1,19 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddLogging(loggingBuilder =>
 {
     loggingBuilder.AddConsole(); // Add logging to console
     loggingBuilder.AddDebug(); // Add logging to debug output
 });
-
-builder.Services.AddHttpClient(); // Register IHttpClientFactory
-builder.Services.AddLogging(); // Add logging service
 
 // Add CORS
 builder.Services.AddCors(options =>
@@ -23,6 +25,13 @@ builder.Services.AddCors(options =>
                .AllowAnyHeader();
     });
 });
+
+// Register AppDbContext with the connection string
+var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+
+// Add HttpClient factory
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

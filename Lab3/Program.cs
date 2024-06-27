@@ -2,7 +2,6 @@ using Data;
 using Laboratorium3_App.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-// using Laboratorium3_App.Data;
 
 namespace Laboratorium3_App
 {
@@ -11,27 +10,36 @@ namespace Laboratorium3_App
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-                        var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
 
-            // Add services to the container.
+            // Retrieve the connection string from configuration
+            var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
+
+            // Add services to the container
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<AppDbContext>();
+
+            // Register AppDbContext with the connection string
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+
+            // Register HttpClient
             builder.Services.AddHttpClient();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>()       
-            .AddRoles<IdentityRole>()                            
-            .AddEntityFrameworkStores<Data.AppDbContext>();   
-            //builder.Services.AddTransient<IReservationService, MemoryReservationService>();
-            builder.Services.AddTransient<IReservationService, ReservationService>();
+            // Configure Identity services
+            builder.Services.AddDefaultIdentity<IdentityUser>()
+                            .AddRoles<IdentityRole>()
+                            .AddEntityFrameworkStores<AppDbContext>();
 
+            // Register custom services
+            builder.Services.AddTransient<IReservationService, ReservationService>();
             builder.Services.AddSingleton<IDateTimeProvider, CurrentDateTimeProvider>();
 
+            // Register caching and session services
             builder.Services.AddMemoryCache();
-            builder.Services.AddSession(); 
+            builder.Services.AddSession();
 
             var app = builder.Build();
 
+            // Initialize the database
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -40,29 +48,27 @@ namespace Laboratorium3_App
                 context.Database.EnsureCreated();
             }
 
-
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-            
 
+            // Middleware for last visit cookie
             app.UseMiddleware<LastVisitCookie>();
-                        app.UseAuthentication();;
 
-            app.UseAuthentication();                                 
-            app.UseAuthorization();                                  
-            app.UseSession();                                        
-            app.MapRazorPages(); 
+            // Authentication and Authorization middleware
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseSession();
 
+            // Map Razor pages and default routes
+            app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

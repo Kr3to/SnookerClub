@@ -11,13 +11,64 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240626100800_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240627104844_test")]
+    partial class test
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.25");
+
+            modelBuilder.Entity("Data.Entities.MatchEntity", b =>
+                {
+                    b.Property<int>("MatchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Player1Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Player1Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Player2Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Player2Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Tournament")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("MatchId");
+
+                    b.ToTable("Matches");
+                });
+
+            modelBuilder.Entity("Data.Entities.PlayerEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Ranking")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Players");
+                });
 
             modelBuilder.Entity("Data.Entities.ReservationEntity", b =>
                 {
@@ -85,15 +136,15 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "62912f20-69b9-4ce0-bb67-1ffefa9398fb",
-                            ConcurrencyStamp = "62912f20-69b9-4ce0-bb67-1ffefa9398fb",
+                            Id = "35a0d0d4-d9f6-4f70-a394-9200cf49aea5",
+                            ConcurrencyStamp = "35a0d0d4-d9f6-4f70-a394-9200cf49aea5",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "fb8cb23a-0d24-4f38-a334-0069bca53e85",
-                            ConcurrencyStamp = "fb8cb23a-0d24-4f38-a334-0069bca53e85",
+                            Id = "369e42c8-a5ea-42bd-9ad4-6ac42b6a7981",
+                            ConcurrencyStamp = "369e42c8-a5ea-42bd-9ad4-6ac42b6a7981",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -188,33 +239,33 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "cc520591-1556-41c8-b0f8-2f7929d9cfb7",
+                            Id = "9df5cc14-23df-4b72-bb84-ec2f3c88f0f7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a3b76877-229e-4f69-9fc1-565291ac4f2d",
+                            ConcurrencyStamp = "0619bbb5-23d6-4410-96c1-82d55f7bbabb",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOrJXhWm+Q1CKSs1hmZyEAbx1rcf6LxKHZAuRqwPwpTcEe6I6G3cK8EYuTbq56Jcjg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKCxZCQf/LgetfR74w716EGNosHktiqbCO1uzJMCvj6Y7w/0IR/HmF/QZHYlGsJQLA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9a94bc95-25e5-4bfe-a1b9-88d381c98406",
+                            SecurityStamp = "820908bc-178e-4633-a7a6-2c4c69727e70",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "92634652-f7ce-4623-8605-9908bd3cc24a",
+                            Id = "b7b04fd5-ff4d-4f44-81a2-6bcdeca46acb",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4168d036-b23c-49e4-b827-414b17b2ae28",
+                            ConcurrencyStamp = "98fadda7-e506-4b38-8734-11ad0ff49004",
                             Email = "user@example.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@EXAMPLE.COM",
                             NormalizedUserName = "USEREXAMPLE",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPNY79cn4NXwayNOf3XoFp00OzsCfKPQmHvLDiosJ89wcGFgRAOBq0rMtrIpO4MP6Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKBDMrxc8W1c/Hn2xjRviU9Ct0U2FVoEyUi7CJhNUtsthxhEtwm0X4lgyki8U1nmXw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fe4d90ad-ad28-46d3-920f-5c38b27252ee",
+                            SecurityStamp = "3025ecad-6e63-4ef6-9836-5a8828ce417e",
                             TwoFactorEnabled = false,
                             UserName = "userexample"
                         });
@@ -246,9 +297,11 @@ namespace Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderKey")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ProviderDisplayName")
@@ -282,13 +335,13 @@ namespace Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "cc520591-1556-41c8-b0f8-2f7929d9cfb7",
-                            RoleId = "62912f20-69b9-4ce0-bb67-1ffefa9398fb"
+                            UserId = "9df5cc14-23df-4b72-bb84-ec2f3c88f0f7",
+                            RoleId = "35a0d0d4-d9f6-4f70-a394-9200cf49aea5"
                         },
                         new
                         {
-                            UserId = "92634652-f7ce-4623-8605-9908bd3cc24a",
-                            RoleId = "fb8cb23a-0d24-4f38-a334-0069bca53e85"
+                            UserId = "b7b04fd5-ff4d-4f44-81a2-6bcdeca46acb",
+                            RoleId = "369e42c8-a5ea-42bd-9ad4-6ac42b6a7981"
                         });
                 });
 
@@ -298,9 +351,11 @@ namespace Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LoginProvider")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .HasMaxLength(128)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Value")

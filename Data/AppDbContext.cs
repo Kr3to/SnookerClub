@@ -7,19 +7,27 @@ namespace Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>
     { 
-        public DbSet<ReservationEntity> Reservations { get; set; }
-        private string DbPath { get; set; } 
-        public AppDbContext() 
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         { 
             var folder = Environment.SpecialFolder.LocalApplicationData; 
             var path = Environment.GetFolderPath(folder); 
             DbPath = System.IO.Path.Join(path, "reservations.db"); 
         }
+
+        public DbSet<ReservationEntity> Reservations { get; set; }
+        public DbSet<PlayerEntity> Players { get; set; }
+        public DbSet<MatchEntity> Matches { get; set; }
+        private string DbPath { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options.UseSqlite($"Data Source={DbPath}");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PlayerEntity>().HasKey(p => p.Id);
+            modelBuilder.Entity<MatchEntity>().HasKey(m => m.MatchId);
+
             modelBuilder.Entity<ReservationEntity>().HasData(
                 new ReservationEntity() { Id = 1, CustomerName = "John Doe", PlayTimeHours = 2, ReservationDate = new DateTime(2015, 11, 21) },
                 new ReservationEntity() { Id = 2, CustomerName = "Jane Smith", PlayTimeHours = 3, ReservationDate = new DateTime(2016, 11, 21) }
