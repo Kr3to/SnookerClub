@@ -114,14 +114,14 @@ dotnet run
 Default users in the database are:
 
 Admin
-Email: admin@example.com
-Username: admin
-Password: 1234Abcd!
+- Email: admin@example.com
+- Username: admin
+- Password: 1234Abcd!
 
 User
-Email: user@example.com
-Username: userexample
-Password: user123PASSW!@#
+- Email: user@example.com
+- Username: userexample
+- Password: user123PASSW!@#
 
 Default hardcoded data in the database is:
 
