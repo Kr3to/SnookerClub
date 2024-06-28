@@ -30,6 +30,18 @@ namespace Data
             modelBuilder.Entity<PlayerEntity>().HasKey(p => p.Id);
             modelBuilder.Entity<MatchEntity>().HasKey(m => m.MatchId);
 
+            modelBuilder.Entity<MatchEntity>()
+                .HasOne(m => m.Player1)
+                .WithMany(p => p.MatchesAsPlayer1)
+                .HasForeignKey(m => m.Player1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MatchEntity>()
+                .HasOne(m => m.Player2)
+                .WithMany(p => p.MatchesAsPlayer2)
+                .HasForeignKey(m => m.Player2Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ReservationEntity>().HasData(
                 new ReservationEntity() { Id = 1, CustomerName = "John Doe", PlayTimeHours = 2, ReservationDate = new DateTime(2015, 11, 21) },
                 new ReservationEntity() { Id = 2, CustomerName = "Jane Smith", PlayTimeHours = 3, ReservationDate = new DateTime(2016, 11, 21) }

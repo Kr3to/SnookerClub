@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using Data.Entities;
 using Data;
+using System.Linq;
 
 namespace MatchService.Controllers
 {
@@ -34,7 +35,7 @@ namespace MatchService.Controllers
 
             if (player1 == null || player2 == null)
             {
-                _logger.LogError("One or both players not found. Player1Id: {Player1Id}, Player2Id: {Player2Id}");
+                _logger.LogError("One or both players not found. Player1Id: {Player1Id}, Player2Id: {Player2Id}", matchDto.Player1Id, matchDto.Player2Id);
                 return BadRequest(new { Message = "One or both players not found." });
             }
 
@@ -43,9 +44,7 @@ namespace MatchService.Controllers
                 Player1Id = matchDto.Player1Id,
                 Player2Id = matchDto.Player2Id,
                 Location = matchDto.Location,
-                Tournament = matchDto.Tournament,
-                Player1Name = player1.Name,
-                Player2Name = player2.Name
+                Tournament = matchDto.Tournament
             };
 
             _context.Matches.Add(match);
@@ -57,7 +56,23 @@ namespace MatchService.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> GetAllMatches()
         {
-            return Ok(await _context.Matches.ToListAsync());
+            var matches = await _context.Matches
+                .Include(m => m.Player1)
+                .Include(m => m.Player2)
+                .ToListAsync();
+
+            var matchDtos = matches.Select(m => new MatchDto
+            {
+                MatchId = m.MatchId,
+                Player1Id = m.Player1Id,
+                Player2Id = m.Player2Id,
+                Player1Name = m.Player1.Name,
+                Player2Name = m.Player2.Name,
+                Location = m.Location,
+                Tournament = m.Tournament
+            }).ToList();
+
+            return Ok(matchDtos);
         }
 
         [HttpGet("test-player-connection/{playerId}")]

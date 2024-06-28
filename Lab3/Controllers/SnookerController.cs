@@ -1,4 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 
 namespace lab3_lab4.Controllers
 {
@@ -27,7 +32,8 @@ namespace lab3_lab4.Controllers
                 var response = await _httpClient.PostAsJsonAsync("http://localhost:5000/player/create", player);
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError("Failed to create player: {StatusCode}", response.StatusCode);
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    _logger.LogError("Failed to create player: {StatusCode}, Response: {ResponseBody}", response.StatusCode, responseBody);
                     ViewBag.ErrorMessage = "Failed to create player.";
                     return View("Error");
                 }
