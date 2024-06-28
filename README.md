@@ -79,11 +79,81 @@ via NuGet console:
 `
 Update-database
 `
+At that point you should be ready to go, however there are 2 thing to check still:
 
+In the appsettings.json my database is specified, if you wish to change it adjust this line.
+`
+"AllowedHosts": "*",
+"ConnectionStrings": {
+  "ApplicationDbContextConnection": "<your_database>"
+}
+`
+Then check if the ports on which the apps are running are allowed by your firewall and not used by any other application, check launchSettings.json in each of the project's Properties.
+`
+"applicationUrl": "https://localhost:7151;http://localhost:5066",
+`
+`
+"applicationUrl": "http://localhost:5000",
+`
+`
+"applicationUrl": "http://localhost:5001",
+`
+By default the ports are 7151 for the main app, 5000 for player microservice and 5001 for match microservice.
 
+Last thing is to ensure the projects are ran together, you can achieve that by right clicking on the solution and "Set startup projects". Choose SnookerClub, PlayerService and MatchService.
 
-
-
-
+`
+dotnet build
+`
+`
+dotnet run
+`
 
 ## Configuration
+
+Default users in the database are:
+
+Admin
+Email: admin@example.com
+Username: admin
+Password: 1234Abcd!
+
+User
+Email: user@example.com
+Username: userexample
+Password: user123PASSW!@#
+
+Default hardcoded data in the database is:
+
+Reservation entity:
+
+- Id = 1, CustomerName = "John Doe", PlayTimeHours = 2, ReservationDate = new DateTime(2015, 11, 21)
+- Id = 2, CustomerName = "Jane Smith", PlayTimeHours = 3, ReservationDate = new DateTime(2016, 11, 21)
+
+HallOfFame entity:
+
+- Id = 1, Name = "Ronnie O'Sullivan", Age = 45, Titles = 7
+- Id = 2, Name = "Stephen Hendry", Age = 52, Titles = 7
+- Id = 3, Name = "Steve Davis", Age = 63, Titles = 6 
+- Id = 4, Name = "Mark Selby", Age = 41, Titles = 4
+- Id = 5, Name = "John Higgins", Age = 49, Titles = 4
+
+### Tests
+
+Project also contains 10 tests which are ensuring that controllers are working properly and entities match actual table layout.
+
+You can run them by clicking Test -> Test Explorer -> Run all tests.
+
+Or via terminal:
+`
+cd <test_path>
+`
+`
+dotnet test
+`
+
+
+
+
+
+Author: Mateusz Kręt
