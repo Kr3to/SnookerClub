@@ -23,8 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
-    <ProjectReference Include="..\Lab3\Lab3_Lab4.csproj" />
+    <ProjectReference Include="..\Lab3\SnookerClub.csproj" />
   </ItemGroup>
 
 </Project>

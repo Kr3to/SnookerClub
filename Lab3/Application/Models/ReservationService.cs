@@ -1,6 +1,6 @@
 using Data;
 using Data.Entities;
-using Laboratorium3_App.Mappers;
+using Laboratorium3_App.Application.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;

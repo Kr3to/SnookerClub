@@ -1,7 +1,7 @@
 using Data.Entities;
 using Laboratorium3_App.Models;
 
-namespace Laboratorium3_App.Mappers
+namespace Laboratorium3_App.Application.Mappers
 {
     public class ReservationMapper
     {
@@ -12,7 +12,7 @@ namespace Laboratorium3_App.Mappers
                 Id = entity.Id,
                 CustomerName = entity.CustomerName,
                 PlayTimeHours = entity.PlayTimeHours,
-                ReservationDate = (DateTime)entity.ReservationDate
+                ReservationDate = entity.ReservationDate
             };
         }
 
