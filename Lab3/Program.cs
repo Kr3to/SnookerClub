@@ -13,7 +13,8 @@ namespace Laboratorium3_App
 
             // Retrieve the connection string from configuration
             var connectionString = builder.Configuration.GetConnectionString("ApplicationDbContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContextConnection' not found.");
-
+                
+           
             // Add services to the container
             builder.Services.AddRazorPages();
             builder.Services.AddControllersWithViews();

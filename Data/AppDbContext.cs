@@ -18,6 +18,8 @@ namespace Data
         public DbSet<ReservationEntity> Reservations { get; set; }
         public DbSet<PlayerEntity> Players { get; set; }
         public DbSet<MatchEntity> Matches { get; set; }
+        public DbSet<HallOfFame> HallOfFame { get; set; }
+
         private string DbPath { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options) =>
@@ -31,6 +33,14 @@ namespace Data
             modelBuilder.Entity<ReservationEntity>().HasData(
                 new ReservationEntity() { Id = 1, CustomerName = "John Doe", PlayTimeHours = 2, ReservationDate = new DateTime(2015, 11, 21) },
                 new ReservationEntity() { Id = 2, CustomerName = "Jane Smith", PlayTimeHours = 3, ReservationDate = new DateTime(2016, 11, 21) }
+            );
+
+            modelBuilder.Entity<HallOfFame>().HasData(
+                new HallOfFame { Id = 1, Name = "Ronnie O'Sullivan", Age = 45, Titles = 7 },
+                new HallOfFame { Id = 2, Name = "Stephen Hendry", Age = 52, Titles = 7 },
+                new HallOfFame { Id = 3, Name = "Steve Davis", Age = 63, Titles = 6 },
+                new HallOfFame { Id = 4, Name = "Mark Selby", Age = 41, Titles = 4 },
+                new HallOfFame { Id = 5, Name = "John Higgins", Age = 49, Titles = 4 }
             );
 
             base.OnModelCreating(modelBuilder);

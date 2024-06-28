@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Data.Entities.HallOfFame>
+
+<h2>Hall of Fame</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Titles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var player in Model)
+        {
+            <tr>
+                <td>@player.Name</td>
+                <td>@player.Age</td>
+                <td>@player.Titles</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MatchService", "MatchServic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayerService", "PlayerService\PlayerService.csproj", "{F873D719-56E9-459C-AA9B-F5E587415BF6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnookerClub.Tests", "SnookerClub.Tests\SnookerClub.Tests.csproj", "{FB786DAA-3C3B-4E6A-945A-5BBD7B703614}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{F873D719-56E9-459C-AA9B-F5E587415BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F873D719-56E9-459C-AA9B-F5E587415BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F873D719-56E9-459C-AA9B-F5E587415BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB786DAA-3C3B-4E6A-945A-5BBD7B703614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB786DAA-3C3B-4E6A-945A-5BBD7B703614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB786DAA-3C3B-4E6A-945A-5BBD7B703614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB786DAA-3C3B-4E6A-945A-5BBD7B703614}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
